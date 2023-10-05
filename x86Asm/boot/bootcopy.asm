@@ -5,45 +5,41 @@ int 0x10
 
 xchg bx,bx
 
+; 初始化段寄存器
+mov ax, 0
+mov ds, ax
+mov es, ax
+mov ss, ax
+mov sp, 0x7c00
+
+mov si, 0
+
+; 屏幕显示区域
+mov ax,0xb800
+mov es,ax
+mov di,0
+
 mov ax,0
 mov ds,ax
-mov ss,ax
-mov sp,0x7c00
+mov si,message
 
-mov word [0x80*4],print
-mov word [0x80*4+2],0
+; 显示字符H
 
-int 0x80
+showMessage:
+    mov cl,[si]
+    jcxz showMessageEnd
 
+    mov [es:di],cl
+    add di,2
+    add si,1
 
+    jmp showMessage
 
-
+showMessageEnd:
     
 
 ; 阻塞
 jmp $
-
-print:
-    mov si,message
-    push ax
-    mov ax,0xb800
-    mov es,ax
-    pop ax
-    mov di,0
-
-printStart:
-    mov cl,[si]
-    jcxz printEnd
-
-    mov [es:di],cl
-    inc si
-    add di,2
-
-    jmp printStart
-
-printEnd:
-    iret
-    
 
 message:
     db "hello world",0
