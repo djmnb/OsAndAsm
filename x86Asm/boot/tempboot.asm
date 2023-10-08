@@ -89,6 +89,16 @@ Label_Start:
 	xor	dl,	dl
 	int	13h
 
+    mov	ax,	00h
+	mov	es,	ax
+	mov	bx,	8000h
+    mov ax,19
+    mov cx,1
+
+    ; call Func_ReadOneSector
+
+    ; jmp $
+
 ;=======	search loader.bin
 	mov	word	[SectorNo],	SectorNumOfRootDirStart
 
@@ -204,30 +214,35 @@ Label_File_Loaded:
 ;=======	read one sector from floppy
 
 Func_ReadOneSector:
-	
-	push	bp
-	mov	bp,	sp
-	sub	esp,	2
-	mov	byte	[bp - 2],	cl
-	push	bx
-	mov	bl,	[BPB_SecPerTrk]
-	div	bl
-	inc	ah
-	mov	cl,	ah
-	mov	dh,	al
-	shr	al,	1
-	mov	ch,	al
-	and	dh,	1
-	pop	bx
-	mov	dl,	[BS_DrvNum]
-Label_Go_On_Reading:
-	mov	ah,	2
-	mov	al,	byte	[bp - 2]
-	int	13h
-	jc	Label_Go_On_Reading
-	add	esp,	2
-	pop	bp
-	ret
+
+    ; push ax
+    ; push cx
+
+    ; push ax
+    ; push cx
+
+    ; pop ax
+    ; pop cx
+
+	; mov ah, 0x02    ; AH  表示读扇区
+    ; mov ch, 0x00    ; 柱面号0
+    ; add cl,1
+    ; mov dh, 0x01    ; 磁头号0
+    ; mov dl, 0x80    ; DL = 80 表示第一个硬盘，可以调整为其他值
+    ; int 0x13
+
+    ; pop cx
+    ; pop ax
+    xchg ax,cx
+    mov ah, 0x02    ; AH = 02 表示读扇区
+    ;mov al, 0x01    ; AL = 01 表示读取一个扇区
+    mov ch, 0x00    ; 柱面号0
+    add cl, 1      ; 扇区号1
+    mov dh, 0x00    ; 磁头号0
+    mov dl, 0x80    ; DL = 80 表示第一个硬盘，可以调整为其他值
+    int 0x13  
+
+    ret
 
 ;=======	get FAT Entry
 

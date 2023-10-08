@@ -5,10 +5,8 @@ display_library: x,options="gui_debug"
 memory: host=32, guest=32
 romimage: file="/usr/local/share/bochs/BIOS-bochs-latest"
 vgaromimage: file="/usr/local/share/bochs/VGABIOS-lgpl-latest"
-boot: floppy
-floppy_bootsig_check: disabled=1
-
-floppya: image="boot.img", status=inserted
+boot: disk
+floppy_bootsig_check: disabled=0
 # no floppya
 # no floppyb
 ata0: enabled=1, ioaddr1=0x1f0, ioaddr2=0x3f0, irq=14
